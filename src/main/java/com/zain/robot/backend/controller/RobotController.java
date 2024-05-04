@@ -1,6 +1,7 @@
 package com.zain.robot.backend.controller;
 
-import com.zain.robot.backend.domain.dto.CommandRspDTO;
+import com.zain.robot.backend.domain.dto.CommandRequestDTO;
+import com.zain.robot.backend.domain.dto.CommandResponseDTO;
 import com.zain.robot.backend.service.RobotService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +22,9 @@ public class RobotController {
     private final RobotService robotService;
 
     @PostMapping("/execute-commands")
-    public ResponseEntity<List<CommandRspDTO>> executeCommands(@RequestBody List<String> commands) {
-        log.info("Entering executeCommands controller method to execute command {}", commands);
-        List<CommandRspDTO> commandResponseList = robotService.executeCommands(commands);
+    public ResponseEntity<List<CommandResponseDTO>> executeCommands(@RequestBody CommandRequestDTO commandRequestDTO) {
+        log.info("Entering executeCommands controller method to execute command {}", commandRequestDTO);
+        List<CommandResponseDTO> commandResponseList = robotService.executeCommands(commandRequestDTO);
 
         if (CollectionUtils.isEmpty(commandResponseList)) return ResponseEntity.badRequest().body(Collections.emptyList());
         return ResponseEntity.ok(commandResponseList);
