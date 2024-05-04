@@ -1,6 +1,7 @@
 package com.zain.robot.backend.service;
 
-import com.zain.robot.backend.domain.dto.CommandRspDTO;
+import com.zain.robot.backend.domain.dto.CommandRequestDTO;
+import com.zain.robot.backend.domain.dto.CommandResponseDTO;
 import com.zain.robot.backend.domain.enums.OperationType;
 import com.zain.robot.backend.exception.NoCommandFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,30 +34,31 @@ class RobotServiceTest {
     @Test
     void testExecuteCommands_EmptyCommands() {
         // Act
-        assertThrows(NoCommandFoundException.class, () -> robotService.executeCommands(Collections.emptyList()));
+        assertThrows(NoCommandFoundException.class, () -> robotService.executeCommands(
+                CommandRequestDTO.builder().listOfCommands(Collections.emptyList()).build()));
     }
 
     @Test
     void testExecuteCommands_InvalidCommands() {
-        // Arrange
+        // Given
         List<String> commands = Collections.singletonList("INVALID_COMMAND");
 
-        // Act
-        List<CommandRspDTO> result = robotService.executeCommands(commands);
+        // Action
+        List<CommandResponseDTO> result = robotService.executeCommands(CommandRequestDTO.builder().listOfCommands(commands).build());
 
-        // Assert
+        // Then
         assertTrue(CollectionUtils.isEmpty(result));
     }
 
     @Test
     void testExecuteCommands_ValidCommands() {
-        // Arrange
+        // Given
         List<String> commands = List.of("WAIT", "FORWARD 3");
 
-        // Act
-        List<CommandRspDTO> result = robotService.executeCommands(commands);
+        // Action
+        List<CommandResponseDTO> result = robotService.executeCommands(CommandRequestDTO.builder().listOfCommands(commands).build());
 
-        // Assert
+        // Then
         assertFalse(result.isEmpty());
         assertEquals(OperationType.WAIT, result.get(0).getOperationType());
         assertEquals(OperationType.FORWARD, result.get(1).getOperationType());
