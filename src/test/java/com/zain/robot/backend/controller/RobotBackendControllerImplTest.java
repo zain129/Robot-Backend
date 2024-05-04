@@ -45,7 +45,7 @@ class RobotBackendControllerImplTest {
                 .operationType(OperationType.POSITION)
                 .otherInfo("Other Info")
                 .build();
-        when(robotBackendService.executeCommands(Mockito.<CommandRequestDTO>any())).thenReturn(buildResult);
+        when(robotBackendService.executeCommands(Mockito.any())).thenReturn(buildResult);
 
         CommandRequestDTO commandRequestDTO = new CommandRequestDTO();
         commandRequestDTO.setCurrentColPosition(1L);
