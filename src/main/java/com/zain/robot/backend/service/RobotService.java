@@ -33,21 +33,27 @@ public class RobotService {
         commands.stream()
                 .map(command -> command.split(" "))
                 .forEach(subCommands -> {
-                    CommandRspDTO commandRspDTO = CommandRspDTO.builder()
-                            .operationType(OperationType.findByValue(subCommands[0]))
-                            .build();
+                    if (isValidCommand(subCommands[0])) {
+                        CommandRspDTO commandRspDTO = CommandRspDTO.builder()
+                                .operationType(OperationType.findByValue(subCommands[0]))
+                                .build();
 
-                    if (isForwardOrReverseCommand(subCommands[0])) {
-                        commandRspDTO.setMovingSteps(Integer.parseInt(subCommands[1]));
-                    } else if (isChangePositionCommand(subCommands[0])) {
-                        commandRspDTO.setMovingSteps(Integer.parseInt(subCommands[1]));
-                        commandRspDTO.setOtherInfo(Integer.parseInt(subCommands[2]) + " " + subCommands[3]);
+                        if (isForwardOrReverseCommand(subCommands[0])) {
+                            commandRspDTO.setMovingSteps(Integer.parseInt(subCommands[1]));
+                        } else if (isChangePositionCommand(subCommands[0])) {
+                            commandRspDTO.setMovingSteps(Integer.parseInt(subCommands[1]));
+                            commandRspDTO.setOtherInfo(Integer.parseInt(subCommands[2]) + " " + subCommands[3]);
+                        }
+
+                        commandRspDTOList.add(commandRspDTO);
                     }
-
-                    commandRspDTOList.add(commandRspDTO);
                 });
 
         return commandRspDTOList;
+    }
+
+    private boolean isValidCommand(String subCommand) {
+        return Objects.nonNull(OperationType.findByValue(subCommand));
     }
 
     private boolean isForwardOrReverseCommand(String subCommand) {
