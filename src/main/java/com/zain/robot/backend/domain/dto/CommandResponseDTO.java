@@ -10,8 +10,9 @@ import lombok.*;
 @Builder
 @ToString
 public class CommandResponseDTO {
-
     private OperationType operationType;
     private int movingSteps;
     private String otherInfo;
+    private Long newRowPosition;
+    private Long newColPosition;
 }

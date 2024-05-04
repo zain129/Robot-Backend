@@ -11,5 +11,8 @@ import java.util.List;
 @Builder
 @ToString
 public class CommandRequestDTO {
-    private List<String> listOfCommands;
+    private String stringCommand;
+    private Long currentRowPosition;
+    private Long currentColPosition;
+    private String facePosition;
 }

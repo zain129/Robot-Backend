@@ -9,7 +9,6 @@ public enum OperationType {
 
     POSITION("POSITION"),
     FORWARD("FORWARD"),
-    REVERSE("REVERSE"),
     WAIT("WAIT"),
     TURNAROUND("TURNAROUND"),
     RIGHT("RIGHT");
