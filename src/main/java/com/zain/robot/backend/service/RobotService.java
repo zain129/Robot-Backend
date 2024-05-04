@@ -23,12 +23,12 @@ public class RobotService {
             throw new NoCommandFoundException();
         }
 
-        List<CommandRspDTO> commandRspDTOList = mapCommands(commands);
+        List<CommandRspDTO> commandRspDTOList = createCommandRspDtoList(commands);
         log.info("Mapped list of commands {}", commandRspDTOList);
         return commandRspDTOList;
     }
 
-    private List<CommandRspDTO> mapCommands(List<String> commands) {
+    private List<CommandRspDTO> createCommandRspDtoList(List<String> commands) {
         List<CommandRspDTO> commandRspDTOList = new ArrayList<>();
         commands.stream()
                 .map(command -> command.split(" "))
@@ -36,16 +36,25 @@ public class RobotService {
                     CommandRspDTO commandRspDTO = CommandRspDTO.builder()
                             .operationType(OperationType.findByValue(subCommands[0]))
                             .build();
-                    if (Objects.equals(subCommands[0], FORWARD.getValue())
-                            || Objects.equals(subCommands[0], REVERSE.getValue())) {
+
+                    if (isForwardOrReverseCommand(subCommands[0])) {
                         commandRspDTO.setMovingSteps(Integer.parseInt(subCommands[1]));
-                    } else if (Objects.equals(subCommands[0], POSITION.getValue())) {
+                    } else if (isChangePositionCommand(subCommands[0])) {
                         commandRspDTO.setMovingSteps(Integer.parseInt(subCommands[1]));
                         commandRspDTO.setOtherInfo(Integer.parseInt(subCommands[2]) + " " + subCommands[3]);
                     }
+
                     commandRspDTOList.add(commandRspDTO);
                 });
 
         return commandRspDTOList;
+    }
+
+    private boolean isForwardOrReverseCommand(String subCommand) {
+        return Objects.equals(subCommand, FORWARD.getValue()) || Objects.equals(subCommand, REVERSE.getValue());
+    }
+
+    private boolean isChangePositionCommand(String subCommand) {
+        return Objects.equals(subCommand, POSITION.getValue());
     }
 }
