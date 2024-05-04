@@ -1,63 +1,108 @@
 package com.zain.robot.backend.controller;
 
-import com.zain.robot.backend.domain.dto.CommandRspDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zain.robot.backend.domain.dto.CommandRequestDTO;
+import com.zain.robot.backend.domain.dto.CommandResponseDTO;
+import com.zain.robot.backend.domain.enums.OperationType;
 import com.zain.robot.backend.service.RobotService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@ContextConfiguration(classes = {RobotController.class})
+@ExtendWith(SpringExtension.class)
 class RobotControllerTest {
-
-    @Mock
-    private RobotService robotService;
-
-    @InjectMocks
+    @Autowired
     private RobotController robotController;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.initMocks(this);
+    @MockBean
+    private RobotService robotService;
+
+    @Test
+    void testExecuteCommands() throws Exception {
+        // Given
+        when(robotService.executeCommands(Mockito.<CommandRequestDTO>any())).thenReturn(new ArrayList<>());
+
+        CommandRequestDTO commandRequestDTO = CommandRequestDTO.builder()
+                .listOfCommands(new ArrayList<>())
+                .build();
+        String content = (new ObjectMapper()).writeValueAsString(commandRequestDTO);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/execute-commands")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content);
+
+        // Action
+        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(robotController)
+                .build()
+                .perform(requestBuilder);
+
+        // Then
+        actualPerformResult.andExpect(MockMvcResultMatchers.status().is(400))
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.content().string("[]"));
     }
 
     @Test
-    void testExecuteCommands() {
-        // Arrange
-        List<String> commands = Collections.singletonList("FORWARD 3");
-        List<CommandRspDTO> expectedResponse = Collections.singletonList(new CommandRspDTO());
-        when(robotService.executeCommands(commands)).thenReturn(expectedResponse);
+    void testExecuteCommands2() throws Exception {
+        // Given
+        ArrayList<CommandResponseDTO> commandResponseDTOList = new ArrayList<>();
+        CommandResponseDTO buildResult = CommandResponseDTO.builder()
+                .movingSteps(1)
+                .operationType(OperationType.POSITION)
+                .otherInfo("Other Info")
+                .build();
+        commandResponseDTOList.add(buildResult);
+        when(robotService.executeCommands(Mockito.<CommandRequestDTO>any())).thenReturn(commandResponseDTOList);
 
-        // Act
-        ResponseEntity<List<CommandRspDTO>> responseEntity = robotController.executeCommands(commands);
+        CommandRequestDTO commandRequestDTO = new CommandRequestDTO();
+        commandRequestDTO.setListOfCommands(new ArrayList<>());
+        String content = (new ObjectMapper()).writeValueAsString(commandRequestDTO);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/execute-commands")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content);
 
-        // Assert
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(expectedResponse, responseEntity.getBody());
-        verify(robotService).executeCommands(commands);
+        // Action and Then
+        MockMvcBuilders.standaloneSetup(robotController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .string("[{\"operationType\":\"POSITION\",\"movingSteps\":1,\"otherInfo\":\"Other Info\"}]"));
     }
 
     @Test
     void testExecuteCommands_EmptyResponse() {
-        // Arrange
-        List<String> commands = Collections.singletonList("INVALID_COMMAND 1");
-        when(robotService.executeCommands(commands)).thenReturn(Collections.emptyList());
+        // Given
+        List<String> commands = List.of("INVALID_COMMAND");
+        when(robotService.executeCommands(CommandRequestDTO.builder().listOfCommands(commands).build()))
+                .thenReturn(Collections.emptyList());
 
-        // Act
-        ResponseEntity<List<CommandRspDTO>> responseEntity = robotController.executeCommands(commands);
+        // Action
+        ResponseEntity<List<CommandResponseDTO>> responseEntity =
+                robotController.executeCommands(CommandRequestDTO.builder().listOfCommands(commands).build());
 
-        // Assert
+        // Then
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertEquals(Collections.emptyList(), responseEntity.getBody());
-        verify(robotService).executeCommands(commands);
     }
 }
