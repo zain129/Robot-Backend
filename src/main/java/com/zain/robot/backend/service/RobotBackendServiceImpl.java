@@ -31,7 +31,7 @@ public class RobotBackendServiceImpl implements RobotBackendService {
 
     private CommandResponseDTO createCommandResponseDTO(CommandRequestDTO commandRequestDTO) {
         CommandResponseDTO commandResponseDTO = null;
-        String[] subCommands = commandRequestDTO.getStringCommand().split("");
+        String[] subCommands = commandRequestDTO.getStringCommand().split(" ");
 
         if (isValidCommand(subCommands[0])) {
             commandResponseDTO = CommandResponseDTO.builder()
