@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -24,7 +25,7 @@ public class RobotController {
         log.info("Entering executeCommands controller method to execute command {}", commands);
         List<CommandRspDTO> commandResponseList = robotService.executeCommands(commands);
 
-        if (CollectionUtils.isEmpty(commandResponseList)) return ResponseEntity.badRequest().body(null);
+        if (CollectionUtils.isEmpty(commandResponseList)) return ResponseEntity.badRequest().body(Collections.emptyList());
         return ResponseEntity.ok(commandResponseList);
     }
 }
