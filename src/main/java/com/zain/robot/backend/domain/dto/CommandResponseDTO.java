@@ -9,7 +9,7 @@ import lombok.*;
 @Getter
 @Builder
 @ToString
-public class CommandRspDTO {
+public class CommandResponseDTO {
 
     private OperationType operationType;
     private int movingSteps;
