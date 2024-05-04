@@ -40,7 +40,7 @@ class RobotControllerTest {
     @Test
     void testExecuteCommands() throws Exception {
         // Given
-        when(robotService.executeCommands(Mockito.<CommandRequestDTO>any())).thenReturn(new ArrayList<>());
+        when(robotService.executeCommands(Mockito.any())).thenReturn(new ArrayList<>());
 
         CommandRequestDTO commandRequestDTO = CommandRequestDTO.builder()
                 .listOfCommands(new ArrayList<>())
@@ -71,7 +71,7 @@ class RobotControllerTest {
                 .otherInfo("Other Info")
                 .build();
         commandResponseDTOList.add(buildResult);
-        when(robotService.executeCommands(Mockito.<CommandRequestDTO>any())).thenReturn(commandResponseDTOList);
+        when(robotService.executeCommands(Mockito.any())).thenReturn(commandResponseDTOList);
 
         CommandRequestDTO commandRequestDTO = new CommandRequestDTO();
         commandRequestDTO.setListOfCommands(new ArrayList<>());
