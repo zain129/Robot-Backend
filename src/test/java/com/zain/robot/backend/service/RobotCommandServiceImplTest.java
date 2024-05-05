@@ -81,8 +81,8 @@ class RobotCommandServiceImplTest {
 
         // Then
         verify(commandRequestDTO, atLeast(1)).getStringCommand();
-        assertNull(actualProcessCommandRequestResult.getNewColPosition());
-        assertNull(actualProcessCommandRequestResult.getNewRowPosition());
+        assertNotNull(actualProcessCommandRequestResult.getNewColPosition());
+        assertNotNull(actualProcessCommandRequestResult.getNewRowPosition());
         assertNull(actualProcessCommandRequestResult.getOtherInfo());
         assertEquals(0, actualProcessCommandRequestResult.getMovingSteps());
         assertEquals(OperationType.WAIT, actualProcessCommandRequestResult.getOperationType());
