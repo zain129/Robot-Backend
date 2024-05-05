@@ -43,7 +43,12 @@ public class RobotCommandServiceImpl implements RobotCommandService {
         CommandResponseDTO commandResponseDTO = CommandResponseDTO.builder()
                 .operationType(OperationType.findByValue(subCommands[0]))
                 .build();
-        if (isForwardCommand(subCommands[0])) {
+        if (isPositionCommand(subCommands[0])) {
+            commandResponseDTO.setMovingSteps(Integer.parseInt(subCommands[1]));
+            commandResponseDTO.setNewRowPosition(1L);
+            commandResponseDTO.setNewColPosition(1L);
+
+        } else if (isForwardCommand(subCommands[0])) {
             int steps = Integer.parseInt(subCommands[1]);
             commandResponseDTO.setMovingSteps(steps);
             commandResponseDTO.setNewRowPosition(
@@ -85,6 +90,10 @@ public class RobotCommandServiceImpl implements RobotCommandService {
 
     private boolean isValidCommand(String subCommand) {
         return Objects.nonNull(OperationType.findByValue(subCommand));
+    }
+
+    private boolean isPositionCommand(String subCommand) {
+        return Objects.equals(subCommand, POSITION.getValue());
     }
 
     private boolean isForwardCommand(String subCommand) {
