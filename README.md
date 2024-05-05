@@ -6,9 +6,11 @@ This project consists of a single API endpoint.
 
 #### [POST] /execute-script/
 * Request Body <br>
-  `List of String commands: e.g. { "FORWARD 3", "WAIT" }`
+  `CommandRequestDTO Object`
+  * `{ "stringCommand": "FORWARD 3", "currentRowPosition": 1, "currentColPosition": 1, "facePosition": "DOWN" }`
 * Response <br>
-  `List of CommandRspDTO object`
+  `CommandResponseDTO object`
+  * `{ "operationType": "FORWARD", "movingSteps": 3, "otherInfo": null, "newRowPosition": 1, "newColPosition": 4 }`
 
 ### Explanation
 * The purpose of this project is to facilitate the core functionality of the robot application. <br>
