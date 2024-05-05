@@ -42,7 +42,10 @@ public class RobotCommandServiceImpl implements RobotCommandService {
     private CommandResponseDTO createCommandResponseDTO(CommandRequestDTO commandRequestDTO, String[] subCommands) {
         CommandResponseDTO commandResponseDTO = CommandResponseDTO.builder()
                 .operationType(OperationType.findByValue(subCommands[0]))
+                .newColPosition(commandRequestDTO.getCurrentColPosition())
+                .newRowPosition(commandRequestDTO.getCurrentRowPosition())
                 .build();
+
         if (isPositionCommand(subCommands[0])) {
             commandResponseDTO.setMovingSteps(Integer.parseInt(subCommands[1]));
             commandResponseDTO.setNewRowPosition(1L);
@@ -64,7 +67,7 @@ public class RobotCommandServiceImpl implements RobotCommandService {
         return commandResponseDTO;
     }
 
-    private Long deduceRowPosition(Long currentPosition, int steps, String facePosition) {
+    private Long deduceColPosition(Long currentPosition, int steps, String facePosition) {
         long newPosition = currentPosition;
         if (Objects.equals(facePosition, RobotBackendConstant.FACE_RIGHT)) {
             newPosition += steps;
@@ -75,7 +78,7 @@ public class RobotCommandServiceImpl implements RobotCommandService {
         return newPosition;
     }
 
-    private Long deduceColPosition(Long currentPosition, int steps, String facePosition) {
+    private Long deduceRowPosition(Long currentPosition, int steps, String facePosition) {
         long newPosition = currentPosition;
         if (Objects.equals(facePosition, RobotBackendConstant.FACE_UP)) {
             newPosition -= steps;
