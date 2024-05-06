@@ -15,4 +15,5 @@ public class CommandResponseDTO {
     private String otherInfo;
     private Long newRowPosition;
     private Long newColPosition;
+    private String facePosition;
 }
