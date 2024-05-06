@@ -58,7 +58,7 @@ class CommandParserServiceImplTest {
     @Test
     void testParseCommand3() {
         // Arrange
-        when(positionCalculatorService.deduceFacePosition(Mockito.<OperationType>any(), Mockito.<String>any()))
+        when(positionCalculatorService.deduceFacePosition(Mockito.any(), Mockito.any()))
                 .thenReturn("Deduce Face Position");
         CommandRequestDTO commandRequestDTO = mock(CommandRequestDTO.class);
         when(commandRequestDTO.getCurrentColPosition()).thenReturn(1L);

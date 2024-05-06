@@ -68,7 +68,7 @@ class RobotBackendControllerImplTest {
                 .otherInfo("Other Info")
                 .build();
         commandResponseDTOList.add(buildResult);
-        when(robotBackendService.executeAllCommands(Mockito.<List<CommandRequestDTO>>any()))
+        when(robotBackendService.executeAllCommands(Mockito.any()))
                 .thenReturn(commandResponseDTOList);
         MockHttpServletRequestBuilder contentTypeResult = MockMvcRequestBuilders.post("/robot-backend/execute-all-commands")
                 .contentType(MediaType.APPLICATION_JSON);
@@ -100,7 +100,7 @@ class RobotBackendControllerImplTest {
                 .operationType(OperationType.POSITION)
                 .otherInfo("Other Info")
                 .build();
-        when(robotBackendService.executeCommand(Mockito.<CommandRequestDTO>any())).thenReturn(buildResult);
+        when(robotBackendService.executeCommand(Mockito.any())).thenReturn(buildResult);
 
         CommandRequestDTO commandRequestDTO = new CommandRequestDTO();
         commandRequestDTO.setCurrentColPosition(1L);
