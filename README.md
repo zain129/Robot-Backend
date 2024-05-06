@@ -2,15 +2,23 @@
 This repository contains the backend implementation for the assignment provided by Idealo.
 
 ### API
-This project consists of a single API endpoint.
+This project consists of two POST API endpoint.
 
-#### [POST] /execute-script/
+#### [POST] /execute-script
 * Request Body <br>
   `CommandRequestDTO Object`
   * `{ "stringCommand": "FORWARD 3", "currentRowPosition": 1, "currentColPosition": 1, "facePosition": "DOWN" }`
 * Response <br>
   `CommandResponseDTO object`
   * `{ "operationType": "FORWARD", "movingSteps": 3, "otherInfo": null, "newRowPosition": 1, "newColPosition": 4 }`
+
+#### [POST] /execute-all-commands
+* Request Body <br>
+  `List of CommandRequestDTO Objects`
+  * `[{ "stringCommand": "FORWARD 3", "currentRowPosition": 1, "currentColPosition": 1, "facePosition": "DOWN" }]`
+* Response <br>
+  `List of CommandResponseDTO Objects`
+  * `[{ "operationType": "FORWARD", "movingSteps": 3, "otherInfo": null, "newRowPosition": 1, "newColPosition": 4 }]`
 
 ### Explanation
 * The purpose of this project is to facilitate the core functionality of the robot application. <br>
@@ -34,3 +42,8 @@ This project consists of a single API endpoint.
 * Review comments will be resolved (if any).
 * A pull-request will be raised to merge code from develop branch into master branch.
 
+<br/>
+
+#### Credits
+* https://stackoverflow.com
+* https://docs.diffblue.com
