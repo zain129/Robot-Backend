@@ -12,8 +12,11 @@ import static com.zain.robot.backend.util.RobotBackendConstant.*;
 @Service
 public class PositionCalculatorServiceImpl implements PositionCalculatorService {
 
-    @Value("${robot.grid.size}")
-    private Integer gridSize;
+    private final Integer gridSize;
+
+    public PositionCalculatorServiceImpl(@Value("${robot.grid.size:5}") Integer gridSize) {
+        this.gridSize = gridSize;
+    }
 
     @Override
     public Long deduceColPosition(Long currentPosition, int steps, String facePosition) {
