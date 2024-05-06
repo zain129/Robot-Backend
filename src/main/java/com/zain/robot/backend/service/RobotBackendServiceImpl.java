@@ -2,16 +2,12 @@ package com.zain.robot.backend.service;
 
 import com.zain.robot.backend.domain.dto.CommandRequestDTO;
 import com.zain.robot.backend.domain.dto.CommandResponseDTO;
-import com.zain.robot.backend.domain.enums.OperationType;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import static com.zain.robot.backend.util.RobotBackendConstant.*;
 
 @Service
 @Slf4j
